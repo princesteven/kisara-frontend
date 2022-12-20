@@ -1,0 +1,50 @@
+@tailwind components;
+@tailwind base;
+@tailwind utilities;
+
+.profile-popover {
+  width: 240px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-bottom: 12px;
+  padding-top: 12px;
+}
+
+.profile-photo-container-large {
+  width: 80px;
+  height: 80px;
+  border-radius: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.18);
+  background: linear-gradient(to right,#094A8D 35%, #094A8D 10%, #c9690f 80%, #c9690f 25%);
+  margin-bottom: 14px;
+}
+
+.profile-photo-large-offset {
+  background: white;
+  width: 76px;
+  height: 76px;
+  border-radius: 38px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.profile-photo-large {
+  width: 71px;
+  height: 71px;
+}
+
+.profile-popover > h3 {
+  font-size: 19px;
+  color: #2e2e2e;
+  font-weight: bold;
+
+}
+
+.profile-popover > span {
+  color: #494949;
+}

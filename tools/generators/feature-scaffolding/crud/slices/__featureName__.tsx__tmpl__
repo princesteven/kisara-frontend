@@ -1,0 +1,167 @@
+import {AxiosError} from "axios";
+import { RootState } from "../../../../store";
+import {createAsyncThunk, createSlice, PayloadAction} from "@reduxjs/toolkit";
+import {
+    api_get<%= createFeatureName(name, true) %>,
+    api_put<%= createFeatureName(name) %>,
+    api_post<%= createFeatureName(name) %>,
+    api_delete<%= createFeatureName(name) %>,
+    api_get<%= createFeatureName(name) %>,
+} from "../services";
+import {
+    Get<%= createFeatureName(name, true) %>Payload,
+    Put<%= createFeatureName(name) %>Payload,
+    Put<%= createFeatureName(name) %>Response,
+    Post<%= createFeatureName(name) %>Payload,
+    Post<%= createFeatureName(name) %>Response,
+    InitialState,
+    Delete<%= createFeatureName(name) %>Response,
+    Get<%= createFeatureName(name, true) %>Response,
+    Get<%= createFeatureName(name) %>Response,
+} from "../types";
+
+const initialState: InitialState = {
+    data: undefined,
+    loading: false,
+}
+
+export const get<%= createFeatureName(name, true) %> = createAsyncThunk<
+  Get<%= createFeatureName(name, true) %>Response,
+  Get<%= createFeatureName(name, true) %>Payload,
+  { rejectValue: any }
+  >(
+    '<%= name %>/get',
+  async (payload, { rejectWithValue }) => {
+    try {
+        return await api_get<%= createFeatureName(name, true) %>(payload);
+    } catch (error: any) {
+        const err: AxiosError<any> = error;
+        if (!err.response) {
+        return rejectWithValue(err);
+        }
+        return rejectWithValue(err.response.data);
+    }
+});
+
+export const get<%= createFeatureName(name) %> = createAsyncThunk<
+  Get<%= createFeatureName(name) %>Response,
+  number | string,
+  { rejectValue: any }
+  >(
+  '<%= name %>/get-single',
+  async (id, { rejectWithValue }) => {
+    try {
+        return await api_get<%= createFeatureName(name) %>(id);
+    } catch (error: any) {
+        const err: AxiosError<any> = error;
+        if (!err.response) {
+            return rejectWithValue(err);
+        }
+        return rejectWithValue(err.response.data);
+    }
+});
+
+export const put<%= createFeatureName(name) %> = createAsyncThunk<
+  Put<%= createFeatureName(name) %>Response,
+  Put<%= createFeatureName(name) %>Payload,
+  { rejectValue: any }
+  >(
+  '<%= name %>/put',
+  async (payload, { rejectWithValue }) => {
+    try {
+        return await api_put<%= createFeatureName(name) %>(payload);
+    } catch (error: any) {
+        const err: AxiosError<any> = error;
+        if (!err.response) {
+            return rejectWithValue(err);
+        }
+        return rejectWithValue(err.response.data);
+    }
+});
+
+export const post<%= createFeatureName(name) %> = createAsyncThunk<
+  Post<%= createFeatureName(name) %>Response,
+  Post<%= createFeatureName(name) %>Payload,
+  { rejectValue: any }
+  >(
+  '<%= name %>/post',
+  async (payload, { rejectWithValue }) => {
+    try {
+        return await api_post<%= createFeatureName(name) %>(payload);
+    } catch (error: any) {
+        const err: AxiosError<any> = error;
+        if (!err.response) {
+            return rejectWithValue(err);
+        }
+        return rejectWithValue(err.response.data);
+    }
+});
+
+export const delete<%= createFeatureName(name) %> = createAsyncThunk<
+  Delete<%= createFeatureName(name) %>Response,
+  number,
+  { rejectValue: any }
+  >(
+  '<%= name %>/delete',
+  async (id, { rejectWithValue }) => {
+    try {
+        return await api_delete<%= createFeatureName(name) %>(id);
+    } catch (error: any) {
+        const err: AxiosError<any> = error;
+        if (!err.response) {
+            return rejectWithValue(err);
+        }
+        return rejectWithValue(err.response.data);
+    }
+});
+
+export const <%= createFeatureFunctionName(name) %>Slice = createSlice({
+  name: '<%= createFeatureFunctionName(name) %>',
+  initialState,
+  reducers: {},
+  extraReducers: builder => {
+    builder
+      .addCase(
+        get<%= createFeatureName(name, true) %>.pending,
+        (state) => {
+          state.loading = true
+        }
+      )
+      .addCase(
+        get<%= createFeatureName(name, true) %>.fulfilled,
+        (state, action: PayloadAction<Get<%= createFeatureName(name, true) %>Response>) => {
+            state.data = action.payload
+            state.loading = false
+        }
+      )
+      .addCase(
+        get<%= createFeatureName(name, true) %>.rejected,
+        (state) => {
+            state.data = undefined
+            state.loading = false
+        }
+      )
+      .addCase(
+        delete<%= createFeatureName(name) %>.pending,
+        (state) => {
+            state.loading = true
+        }
+      )
+      .addCase(
+        delete<%= createFeatureName(name) %>.fulfilled,
+        (state) => {
+            state.loading = false
+        }
+      )
+      .addCase(
+        delete<%= createFeatureName(name) %>.rejected,
+        (state) => {
+            state.loading = false
+        }
+      )
+  }
+})
+
+export const select<%= createFeatureName(name) %> = (state: RootState) => state.<%= createFeatureFunctionName(name) %>;
+
+export default <%= createFeatureFunctionName(name) %>Slice.reducer

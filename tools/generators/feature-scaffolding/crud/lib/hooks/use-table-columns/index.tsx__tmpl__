@@ -1,0 +1,65 @@
+import { Tooltip } from "antd";
+import { Link } from "react-router-dom";
+import { frontend } from '../../../../common/configs';
+import { EyeOutlined } from '@ant-design/icons';
+import { PopConfirm } from '@react-frontends/v2/components';
+import { PrivateAction } from '../../../../common/components/Privates';
+import { useReduxFetch, useReduxPost } from '../../../../common/lib/hooks';
+import { get<%= createFeatureName(name, true) %>, delete<%= createFeatureName(name) %> } from "../../../slices/<%= createFileName(name) %>";
+
+/**
+ * @function
+ * @name useTableColumns
+ * @description custom hook for creating table columns in each feature
+ * @version 2.0.0
+ * @since 2.0.0
+ * @author Prince Malipula
+ * @author Muhammad Mwinchande
+ * @returns {Array}
+ */
+const useTableColumns = () => {
+  const reduxPost = useReduxPost();
+  const reduxFetch = useReduxFetch();
+
+  const handleDelete = (record: any) => {
+    reduxPost(delete<%= createFeatureName(name) %>, record.id)
+      .then(() => {
+        reduxFetch(get<%= createFeatureName(name, true) %>);
+      });
+  };
+
+  return [
+    {
+      title: "Actions",
+      render: (text: string, record: any) => (
+        <div className="flex md:space-x-8">
+          <PrivateAction>
+            <Tooltip title="View & Edit" placement="left">
+              <Link
+                to={`${frontend.<%= createFileName(name) %>.update}/${record.id}`}
+                className="grid place-items-center"
+              >
+                <EyeOutlined className="text-nmb-blue-primary hover:cursor-pointer" />
+              </Link>
+            </Tooltip>
+          </PrivateAction>
+          <PrivateAction>
+            <Tooltip title="Delete" color="#0277BD">
+              <span>
+                  <PopConfirm
+                    okButtonProps={{ danger: true, className: "px-7" }}
+                    cancelButtonProps={{ className: "px-7" }}
+                    confirmMethod={() => handleDelete(record)}
+                  >
+                      <span className="text-red-600 text-lg flaticon-delete hover:cursor-pointer" />
+                  </PopConfirm>
+              </span>
+            </Tooltip>
+          </PrivateAction>
+        </div>
+      )
+    }
+  ];
+};
+
+export default useTableColumns;

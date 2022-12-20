@@ -1,0 +1,20 @@
+import Dashboard from "../pages";
+import {Route} from "react-router-dom";
+import {frontend} from "../../common/configs";
+import {PrivateRoute} from "../../common/components/Privates";
+
+/**
+ * @function
+ * @name DashboardRoute
+ * @description Access level routes
+ * @version 2.0.0
+ * @since 2.0.0
+ * @author Prince Malipula
+ * @returns Dashboard Route
+ */
+export default (
+  <Route
+    path={frontend.dashboard}
+    element={<PrivateRoute component={Dashboard} />}
+  />
+);

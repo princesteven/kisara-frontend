@@ -1,0 +1,7 @@
+.data-table .ant-table-thead > tr > th, .data-table .ant-table-thead > tr > th .ant-tooltip-open {
+  background-color: #e2e2e2;
+}
+
+.data-table .ant-table-column-sorter-up.active, .data-table .ant-table-column-sorter-down.active {
+  color: #ffffff;
+}

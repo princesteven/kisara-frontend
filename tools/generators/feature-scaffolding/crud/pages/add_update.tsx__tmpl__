@@ -1,0 +1,156 @@
+import {useEffect, useState} from "react";
+import {Get<%= createFeatureName(name) %>Response} from "../types";
+import {useNavigate} from "react-router-dom";
+import {ValidationErrors} from "../../common/types";
+import {FormItem} from "@react-frontends/v2/components";
+import {Button, Col, Form, Input, Modal, Row, Spin} from "antd";
+import {useReduxFetch, useReduxPost} from "../../common/lib/hooks";
+import {get<%= createFeatureName(name, true) %>, get<%= createFeatureName(name) %>, post<%= createFeatureName(name) %>, put<%= createFeatureName(name) %>} from "../slices/<%= createFileName(name) %>";
+
+interface AddUpdateProps {
+  id: string;
+}
+
+/**
+ * @function
+ * @name AddUpdate<%= createFeatureName(name) %>
+ * @description add/update
+ * @version 2.0.0
+ * @since 2.0.0
+ * @author Prince Malipula
+ * @author Muhammad Mwinchande
+ * @returns {object}
+ */
+const AddUpdate<%= createFeatureName(name) %>: React.FC<AddUpdateProps> = ({
+                                               id,
+                                             }) => {
+  const navigate = useNavigate();
+  const reduxPost = useReduxPost();
+  const reduxFetch = useReduxFetch();
+  const [<%= createFeatureName(name) %>Form] = Form.useForm();
+  const [loading, setLoading] = useState(false);
+  const [validationErrors, setValidationErrors] =
+    useState<ValidationErrors>();
+
+  useEffect(() => {
+    if (id) {
+      setLoading(true)
+      reduxFetch(get<%= createFeatureName(name) %>, id)
+        .then((data: Get<%= createFeatureName(name) %>Response) => {
+            <%= createFeatureName(name) %>Form.setFieldsValue(data)
+            setLoading(false)
+        })
+        .catch((err) => {
+            setLoading(false)
+            if (err?.errors) {
+                setValidationErrors(err?.errors);
+            }
+        })
+    }
+  }, [])
+
+  const handleSubmit = (values: any) => {
+    if (id) {
+      values = {
+        ...values,
+        id
+      }
+      put(values)
+      return
+    }
+    post(values)
+  }
+
+  const put = (values: any) => {
+    setLoading(true)
+    reduxPost(put<%= createFeatureName(name) %>, values).then(() => {
+      setLoading(false)
+      reduxFetch(get<%= createFeatureName(name, true) %>)
+      handleCancel();
+    }).catch(() => {
+      setLoading(false)
+    })
+  }
+
+  const post = (values: any) => {
+    setLoading(true)
+    reduxPost(post<%= createFeatureName(name) %>, values).then(() => {
+      setLoading(false)
+      reduxFetch(get<%= createFeatureName(name, true) %>)
+      <%= createFeatureName(name) %>Form.resetFields()
+    }).catch(() => {
+      setLoading(false)
+    })
+  }
+
+  const handleCancel = () => {
+    navigate('..');
+  }
+
+  const handleReset = () => {
+    <%= createFeatureName(name) %>Form.resetFields()
+  }
+
+  return (
+    <Modal
+      visible={true}
+      title="Customer"
+      onOk={handleSubmit}
+      onCancel={handleCancel}
+      width={'75%'}
+      style={{top: 20}}
+      footer={[
+        <Button key="back" onClick={handleReset}>
+          Clear
+        </Button>,
+        <Button key="close" onClick={handleCancel}>
+          Close
+        </Button>,
+        <Button
+          key="submit"
+          type="primary"
+          form="<%= createFeatureName(name) %>Form"
+          htmlType="submit"
+          loading={loading}
+        >
+          Submit
+        </Button>,
+      ]}
+    >
+      <Spin spinning={loading}>
+        <Form
+          id="<%= createFeatureName(name) %>Form"
+          name="<%= createFeatureName(name) %>Form"
+          onFinish={handleSubmit}
+          form={<%= createFeatureName(name) %>Form}
+          layout="vertical"
+        >
+          <Row gutter={2}>
+            <Col span="12">
+              <FormItem
+                name="name"
+                rules={[{required: true}]}
+                label="Name"
+                validationErrors={validationErrors!}
+              >
+                <Input placeholder="Name"/>
+              </FormItem>
+            </Col>
+            <Col span="12">
+              <FormItem
+                name="description"
+                rules={[{required: true}]}
+                label="Description"
+                validationErrors={validationErrors!}
+              >
+                <Input placeholder="Description"/>
+              </FormItem>
+            </Col>
+          </Row>
+        </Form>
+      </Spin>
+    </Modal>
+  )
+}
+
+export default AddUpdate<%= createFeatureName(name) %>

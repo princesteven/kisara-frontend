@@ -1,0 +1,54 @@
+import axios from 'axios';
+import Cookies from 'js-cookie';
+import store from "../../../../store";
+import { unwrapResult } from '@reduxjs/toolkit';
+import {getAccessToken, setLoginPopup} from "../../authentication/slices/authentication";
+
+const instance = axios.create({
+  baseURL: process.env['NX_AUTH_URL'],
+  headers: {
+    'Content-Type': 'application/json',
+    Accept: 'application/json',
+  },
+});
+
+instance.interceptors.request.use(async function (config) {
+  const currentUser = Cookies.get('user') || '{}';
+  if (config.url !== 'login') {
+    // const token = JSON.parse(currentUser)?.masterToken;
+    const token = JSON.parse(currentUser)?.accessToken;
+    if (config.headers === undefined) {
+      config.headers = {};
+    }
+    config.headers['Authorization'] = token ? `Bearer ${token}` : '';
+  }
+  return config;
+});
+
+instance.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    if (error.config && error.response && error.response.status === 401) {
+      return new Promise(function () {
+        store.dispatch(getAccessToken())
+          .then(function (token: any) {
+            token = unwrapResult(token)
+            Cookies.set('user', JSON.stringify(token.data), {
+              ...(process.env['NODE_ENV'] === 'production' && {
+                domain: 'nmbtz.com',
+              }),
+            })
+            sessionStorage.setItem('user', token.data)
+            instance.request(error.config);
+          })
+          .catch((error) => {
+            store.dispatch(setLoginPopup(true))
+            throw (error)
+          })
+      })
+    }
+    return Promise.reject(error);
+  }
+);
+
+export default instance;

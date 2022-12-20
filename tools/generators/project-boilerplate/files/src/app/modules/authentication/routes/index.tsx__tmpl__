@@ -1,0 +1,14 @@
+import {Route} from "react-router-dom";
+import {frontend} from "../../common/configs";
+import {AuthRoute} from "../../common/components/Privates";
+
+/**
+ * @function
+ * @name AuthRoutes
+ * @description Auth routes
+ * @version 2.0.0
+ * @since 2.0.
+ * @author Prince Malipula
+ * @returns Auth Page
+ */
+export default <Route path={frontend.login} element={<AuthRoute />} />

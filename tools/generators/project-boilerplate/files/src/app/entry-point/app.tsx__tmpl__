@@ -1,0 +1,50 @@
+import 'antd/dist/antd.css';
+import '../../assets/styles/global.css';
+import '../../assets/styles/flaticon/flaticon.css';
+import store from "../../store";
+import { Suspense } from 'react';
+import { Provider } from "react-redux";
+import {Route, Routes} from 'react-router-dom';
+import NotFound from "../modules/common/pages/NotFound";
+import DashboardRoute from '../modules/dashboard/routes';
+import LoginRoute from '../modules/authentication/routes';
+import {frontend} from "../modules/common/configs";
+import {Loader} from "@react-frontends/v2/components";
+import { AuthMiddleware, AppLayout } from "../modules/common/components";
+
+const App: React.FC = () => {
+    return (
+      <Provider store={store}>
+        <Suspense
+          fallback={
+            <div
+              style={{
+                display: 'flex',
+                height: '100vh',
+                width: '100vw',
+                alignItems: 'center',
+                justifyContent: 'center',
+              }}
+            >
+              <Loader />
+            </div>
+          }
+        >
+          <AuthMiddleware>
+            <Routes>
+              { LoginRoute }
+              <Route
+                path={frontend.dashboard}
+                element={<AppLayout/>}
+              >
+                <Route path="*" element={<NotFound />} />
+                { DashboardRoute }
+              </Route>
+            </Routes>
+          </AuthMiddleware>
+        </Suspense>
+      </Provider>
+    );
+};
+
+export default App;

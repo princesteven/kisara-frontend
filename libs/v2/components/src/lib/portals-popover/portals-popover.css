@@ -1,0 +1,45 @@
+@tailwind components;
+@tailwind base;
+@tailwind utilities;
+
+.portal-container {
+  width: 300px;
+  max-height: 460px;
+  overflow-y: auto;
+  color: white !important;
+}
+
+.portal-container a:hover {
+  text-decoration: none;
+  color: white;
+}
+
+.portal {
+  background-image: linear-gradient(#094A8D, #0a3763);
+  border-radius: 2px;
+  transition: all linear 0.15s;
+  height: 100px;
+  font-size: 12px;
+}
+
+.portal:hover {
+  background-image: linear-gradient(#0d5cac, #0a345e);
+  transform: scale(0.9);
+}
+
+.portal .content {
+  height: inherit;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: white;
+}
+
+.portal .content .logo {
+  width: 30px;
+  height: 40px;
+  background-size: contain;
+  margin-bottom: 6px;
+  background-repeat: no-repeat;
+}

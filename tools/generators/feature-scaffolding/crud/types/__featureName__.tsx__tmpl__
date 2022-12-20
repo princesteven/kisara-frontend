@@ -1,0 +1,47 @@
+import {GenericResponse} from "../../common/types";
+
+export interface InitialState {
+  data: any,
+  loading: boolean
+}
+
+export interface <%= createFeatureName(name) %> {
+
+}
+
+export interface Get<%= createFeatureName(name, true) %>Payload {
+
+}
+
+
+export interface Get<%= createFeatureName(name, true) %>Response extends GenericResponse{
+
+}
+
+export interface Get<%= createFeatureName(name) %>Payload {
+
+}
+
+export interface Get<%= createFeatureName(name) %>Response {
+
+}
+
+export interface Post<%= createFeatureName(name) %>Payload {
+
+}
+
+export interface Post<%= createFeatureName(name) %>Response {
+
+}
+
+export interface Put<%= createFeatureName(name) %>Payload {
+
+}
+
+export interface Put<%= createFeatureName(name) %>Response {
+
+}
+
+export interface Delete<%= createFeatureName(name) %>Response {
+
+}

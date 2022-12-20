@@ -1,0 +1,62 @@
+{
+  "$schema": "http://json-schema.org/schema",
+  "cli": "nx",
+  "$id": "feature-scaffolding",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string",
+      "description": "Feature name",
+      "$default": {
+        "$source": "argv",
+        "index": 0
+      },
+      "x-prompt": "What is the name of your feature?"
+    },
+    "type": {
+      "enum": [
+        "crud",
+        "single"
+      ],
+      "description": "Feature type (crud or single)",
+      "default": "crud",
+      "$default": {
+        "$source": "argv",
+        "index": 1
+      },
+      "x-prompt": {
+        "message": "What feature type is this?",
+        "type": "list",
+        "items": [
+          {
+            "value": "crud",
+            "label": "CRUD"
+          },
+          {
+            "value": "single",
+            "label": "Single"
+          }
+        ]
+      }
+    },
+    "project": {
+      "type": "string",
+      "description": "Project which the feature belongs",
+      "$default": {
+        "$source": "argv",
+        "index": 2
+      },
+      "x-prompt": "What project/app does this feature belong to"
+    },
+    "description": {
+      "type": "string",
+      "description": "Feature description",
+      "x-prompt": "Describe your feature"
+    }
+  },
+  "required": [
+    "name",
+    "type",
+    "project"
+  ]
+}

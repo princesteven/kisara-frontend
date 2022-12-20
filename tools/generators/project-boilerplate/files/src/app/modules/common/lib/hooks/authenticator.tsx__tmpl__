@@ -1,0 +1,36 @@
+import Cookies from 'js-cookie';
+import {useEffect} from 'react';
+import {useAppDispatch, useGetSystToken} from '.';
+import {resetAuth,} from '../../../authentication/slices/authentication';
+
+/**
+ * @function
+ * @name useAuthenticator
+ * @description Determines if the user is logged in
+ * @version 0.0.7
+ * @since 0.0.1
+ * @author Prince Malipula
+ * @returns {void}
+ */
+const useAuthenticator = () => {
+  const dispatch = useAppDispatch();
+  const getSystToken = useGetSystToken();
+
+  useEffect(() => {
+    const userString = Cookies.get('user') || '{}';
+    const token = JSON.parse(userString);
+
+    if (token?.accessToken) {
+      getSystToken();
+      return;
+    }
+
+    dispatch(resetAuth());
+    window.location.href = `${process.env['NX_NMP_URL']}/#/?origin=${process.env['NX_APP_URL']}`;
+    return;
+  }, []);
+
+  return true;
+};
+
+export default useAuthenticator;

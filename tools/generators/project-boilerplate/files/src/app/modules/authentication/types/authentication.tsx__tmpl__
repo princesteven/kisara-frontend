@@ -1,0 +1,41 @@
+import { User } from "../../../../../../../libs/v2/helpers/src/lib/parse-jwt/user-types";
+
+export interface AuthResponse {
+  data: AuthData;
+}
+
+export interface AuthData {
+  user: User;
+  accessToken: string;
+  refreshToken: string;
+  masterToken: string;
+}
+
+export interface AccessToken {
+  accessToken: string;
+  refreshToken: string;
+  masterToken: string;
+}
+
+export interface InitialState {
+  user: User;
+  loading: boolean;
+  error: {
+    status: string;
+    desc: string;
+  } | null;
+  loadingUser: boolean;
+  loginPopup: boolean;
+}
+
+export interface AuthenticationPayload {
+  username: string;
+  password: string;
+  digipass: number;
+  clientId: string;
+  clientSecret: string;
+}
+
+export interface SystemTokenPayload {
+  systemCode: string;
+}

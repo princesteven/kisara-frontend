@@ -1,0 +1,55 @@
+import {useEffect} from "react";
+import {Outlet} from "react-router-dom";
+import { useTableColumns } from '../lib/hooks';
+import { frontend } from '../../common/configs';
+import { PlusOutlined } from '@ant-design/icons';
+import {useReduxFetch, useAppSelector} from "../../common/lib/hooks";
+import {ContentActions, DataTable} from "@react-frontends/v2/components";
+import {get<%= createFeatureName(name, true) %>, select<%= createFeatureName(name) %>} from "../slices/<%= createFileName(name) %>";
+
+
+/**
+ * @function
+ * @name <%= createFeatureName(name) %>
+ * @description <%= description ?? 'Sample feature description' %>
+ * @version 2.0.0
+ * @since 2.0.0
+ * @author Prince Malipula
+ * @author Muhammad Mwinchande
+ * @returns {object}
+ */
+const <%= createFeatureName(name) %> = () => {
+  const columns = useTableColumns();
+  const reduxFetch = useReduxFetch();
+  const { data, loading } = useAppSelector(select<%= createFeatureName(name) %>)
+
+  useEffect(() => {
+    reduxFetch(get<%= createFeatureName(name, true) %>)
+  }, []);
+
+  const onSearch = (value: string) => {
+    reduxFetch(get<%= createFeatureName(name, true) %>, {
+      q: value
+    })
+  }
+
+    return (
+        <div>
+            <Outlet />
+            <ContentActions
+                onSearch={onSearch}
+                buttonTitle={'Add'}
+                icon={<PlusOutlined />}
+                link={`${frontend.<%= createFileName(name) %>.add}`}
+            />
+            <DataTable
+                dataSource={data}
+                columns={columns}
+                loading={loading}
+                className="data-table"
+            />
+        </div>
+    )
+}
+
+export default <%= createFeatureName(name) %>

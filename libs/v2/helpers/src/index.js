@@ -1,0 +1,20 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.createHyphenedColumns = exports.createFeatureName = exports.userIdentifier = exports.columnCreator = exports.parseJwt = exports.ucfirst = exports.ucwords = exports.ucword = void 0;
+var ucword_1 = require("./lib/ucword");
+Object.defineProperty(exports, "ucword", { enumerable: true, get: function () { return ucword_1.ucword; } });
+var ucwords_1 = require("./lib/ucwords");
+Object.defineProperty(exports, "ucwords", { enumerable: true, get: function () { return ucwords_1.ucwords; } });
+var ucfirst_1 = require("./lib/ucfirst");
+Object.defineProperty(exports, "ucfirst", { enumerable: true, get: function () { return ucfirst_1.ucfirst; } });
+var parse_jwt_1 = require("./lib/parse-jwt");
+Object.defineProperty(exports, "parseJwt", { enumerable: true, get: function () { return parse_jwt_1.parseJwt; } });
+var column_creator_1 = require("./lib/column-creator");
+Object.defineProperty(exports, "columnCreator", { enumerable: true, get: function () { return column_creator_1.columnCreator; } });
+var userIdentifier_1 = require("./lib/userIdentifier");
+Object.defineProperty(exports, "userIdentifier", { enumerable: true, get: function () { return userIdentifier_1.userIdentifier; } });
+var create_feature_name_1 = require("./lib/create-feature-name");
+Object.defineProperty(exports, "createFeatureName", { enumerable: true, get: function () { return create_feature_name_1.createFeatureName; } });
+var create_hyphened_columns_1 = require("./lib/create-hyphened-columns");
+Object.defineProperty(exports, "createHyphenedColumns", { enumerable: true, get: function () { return create_hyphened_columns_1.createHyphenedColumns; } });
+//# sourceMappingURL=index.js.map

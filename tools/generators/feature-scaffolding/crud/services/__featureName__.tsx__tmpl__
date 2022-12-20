@@ -1,0 +1,58 @@
+import {Backend, be} from "../../common/configs";
+import {
+    Get<%= createFeatureName(name, true) %>Payload,
+    Get<%= createFeatureName(name) %>Response,
+    Get<%= createFeatureName(name, true) %>Response,
+    Put<%= createFeatureName(name) %>Response,
+    Put<%= createFeatureName(name) %>Payload,
+    Post<%= createFeatureName(name) %>Payload,
+    Post<%= createFeatureName(name) %>Response,
+    Delete<%= createFeatureName(name) %>Response
+} from '../types'
+
+export const api_get<%= createFeatureName(name, true) %> = async (filters: Get<%= createFeatureName(name, true) %>Payload):Promise<Get<%= createFeatureName(name, true) %>Response> => {
+    const response = await Backend.get<Get<%= createFeatureName(name, true) %>Response>(
+        `${be}`,
+        {
+            params: {
+                ...filters
+            }
+        }
+    );
+    const { data } = response;
+    return data;
+}
+
+export const api_get<%= createFeatureName(name) %> = async (id: number | string):Promise<Get<%= createFeatureName(name) %>Response> => {
+    const response = await Backend.get<Get<%= createFeatureName(name) %>Response>(
+        `${be}/${id}`
+    );
+    const { data } = response;
+    return data;
+}
+
+export const api_put<%= createFeatureName(name) %> = async (payload: Put<%= createFeatureName(name) %>Payload):Promise<Put<%= createFeatureName(name) %>Response> => {
+    const response = await Backend.put<Put<%= createFeatureName(name) %>Response>(
+        `${be}/${payload.id}`,
+        payload
+    );
+    const { data } = response;
+    return data;
+}
+
+export const api_post<%= createFeatureName(name) %> = async (payload: Post<%= createFeatureName(name) %>Payload):Promise<Post<%= createFeatureName(name) %>Response> => {
+    const response = await Backend.post<Post<%= createFeatureName(name) %>Response>(
+        `${be}`,
+        payload
+    );
+    const { data } = response;
+    return data;
+}
+
+export const api_delete<%= createFeatureName(name) %> = async (id: number):Promise<Delete<%= createFeatureName(name) %>Response> => {
+    const response = await Backend.delete<Delete<%= createFeatureName(name) %>Response>(
+        `${be}/${id}`
+    );
+    const { data } = response;
+    return data;
+}

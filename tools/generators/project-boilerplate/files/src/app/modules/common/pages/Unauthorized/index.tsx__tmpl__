@@ -1,0 +1,9 @@
+const Unauthorized = () => {
+    return (
+        <div className="grid place-content-center font-semibold w-full min-h-280">
+            403 You are not Authorised to access this page.
+        </div>
+    )
+}
+
+export default Unauthorized

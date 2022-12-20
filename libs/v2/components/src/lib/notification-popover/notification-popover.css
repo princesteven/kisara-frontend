@@ -1,0 +1,47 @@
+@tailwind components;
+@tailwind base;
+@tailwind utilities;
+
+.notifications-container {
+  max-height: 400px;
+  overflow-y: auto;
+  max-width: 280px;
+}
+
+.notifications-container li {
+  margin: 16px 0;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  transition: all linear 0.25s;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.notifications-container li span {
+  margin-right: 10px;
+  color: #aa5608;
+}
+
+.notifications-container li:hover {
+  color: #204679;
+}
+
+.notification-icon-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.notifications-indicator {
+  width: 6px;
+  height: 6px;
+  background-color: #f19318;
+  border-radius: 3px;
+  margin-top: -15px;
+  margin-bottom: 8px;
+  margin-right: -2px;
+  z-index: 9999;
+  animation: fadeInOut 0.80s ease reverse forwards infinite;
+}

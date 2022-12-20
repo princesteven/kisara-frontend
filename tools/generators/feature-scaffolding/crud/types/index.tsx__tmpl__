@@ -1,0 +1,13 @@
+export type {
+    Put<%= createFeatureName(name) %>Payload,
+    Post<%= createFeatureName(name) %>Payload,
+    Put<%= createFeatureName(name) %>Response,
+    Post<%= createFeatureName(name) %>Response,
+    InitialState,
+    Delete<%= createFeatureName(name) %>Response,
+    Get<%= createFeatureName(name, true) %>Payload,
+    Get<%= createFeatureName(name, true) %>Response,
+    Get<%= createFeatureName(name) %>Payload,
+    Get<%= createFeatureName(name) %>Response,
+    <%= createFeatureName(name) %>,
+} from './<%= createFileName(name) %>'

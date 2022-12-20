@@ -1,0 +1,26 @@
+import React from 'react';
+import {useAuthenticator} from "../../lib/hooks";
+
+interface MiddlewareProps {
+  children: React.ReactNode
+}
+
+/**
+ * @function
+ * @name useAuthenticator
+ * @description Determines if the user is logged in
+ * @version 0.0.7
+ * @since 0.0.1
+ * @author Prince Malipula
+ * @author Muhammad Mwinchande
+ * @returns {void}
+ */
+const AuthMiddleware: React.FC<MiddlewareProps> = ({ children }) => {
+  const authenticator = useAuthenticator();
+
+  return <>
+    {children}
+  </>;
+};
+
+export default AuthMiddleware;

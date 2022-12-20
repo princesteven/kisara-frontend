@@ -1,0 +1,41 @@
+{
+    "compileOnSave": false,
+    "compilerOptions": {
+        "rootDir": ".",
+        "sourceMap": true,
+        "declaration": false,
+        "moduleResolution": "node",
+        "emitDecoratorMetadata": true,
+        "experimentalDecorators": true,
+        "importHelpers": true,
+        "target": "ES6",
+        "module": "esnext",
+        "lib": [
+            "DOM",
+            "ES6",
+            "DOM.Iterable",
+            "ScriptHost",
+            "ES2016.Array.Include"
+        ],
+        "skipLibCheck": true,
+        "skipDefaultLibCheck": true,
+        "baseUrl": ".",
+        "jsx": "react-jsx",
+        "paths": {
+            "@react-frontends/components/v1": [
+                "libs/components/v1/src/index.ts"
+            ],
+            "@react-frontends/v1/components": [
+                "libs/v1/components/src/index.ts"
+            ],
+            "@react-frontends/v1/helpers": ["libs/v1/helpers/src/index.ts"],
+            "@react-frontends/v1/hooks": ["libs/v1/hooks/src/index.ts"],
+            "@react-frontends/v2/components": [
+                "libs/v2/components/src/index.ts"
+            ],
+            "@react-frontends/v2/helpers": ["libs/v2/helpers/src/index.ts"],
+            "@react-frontends/v2/hooks": ["libs/v2/hooks/src/index.ts"]
+        }
+    },
+    "exclude": ["node_modules", "tmp"]
+}

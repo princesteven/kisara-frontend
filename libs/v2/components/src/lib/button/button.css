@@ -1,0 +1,66 @@
+@tailwind components;
+@tailwind base;
+@tailwind utilities;
+
+/* ------------------- Custom Button ------------------ */
+.custom-button {
+  outline: none !important;
+  border: none !important;
+  transition: all linear 0.25s;
+  color: rgb(233, 233, 233);
+  box-shadow: none !important;
+  color: white !important;
+  display: flex;
+  align-items: center;
+  padding-bottom: 5px;
+}
+
+.primary {
+  background-color: #094A8D !important;
+}
+
+.success {
+  background-color: #0c6832 !important;
+}
+
+.danger {
+  background-color: #B73B3B !important;
+}
+
+.warning {
+  background-color: #F26F24 !important;
+}
+
+.outlined-primary {
+  color: #191a1b !important;
+  border: 1.5px solid #094A8D !important;
+}
+
+.outlined-danger {
+  color: #B73B3B !important;
+  border: 1.5px solid #B73B3B !important;
+}
+
+.outlined-success {
+  color: #0c6832 !important;
+  border: 1.5px solid #0c6832 !important;
+}
+
+.outlined-warning {
+  color: #F26F24 !important;
+  border: 1.5px solid #F26F24 !important;
+}
+
+.default-icon-button {
+  color: #094A8D !important;
+  background: transparent !important;
+}
+
+.custom-button:hover {
+  box-shadow: 0px 0px 8px #094b8d71;
+  color: rgb(202, 202, 202) !important;
+}
+
+.custom-button::after {
+  display: none;
+}

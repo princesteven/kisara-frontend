@@ -1,0 +1,21 @@
+import <%= createFeatureName(name) %> from "../pages";
+import { Route } from "react-router-dom";
+import AddUpdate<%= createFeatureName(name) %> from "../pages/add_update";
+import { frontend } from '../../common/configs';
+import { PrivateRoute } from '../../common/components/Privates';
+
+export default (
+  <Route
+    path={frontend.<%= createFileName(name) %>.index}
+    element={<PrivateRoute component={<%= createFeatureName(name) %>} />}
+  >
+    <Route
+      path={frontend.<%= createFileName(name) %>.add}
+      element={<PrivateRoute component={AddUpdate<%= createFeatureName(name) %>} />}
+    />
+    <Route
+      path={`${frontend.<%= createFileName(name) %>.update}/:id`}
+      element={<PrivateRoute component={AddUpdate<%= createFeatureName(name) %>} />}
+    />
+  </Route>
+);

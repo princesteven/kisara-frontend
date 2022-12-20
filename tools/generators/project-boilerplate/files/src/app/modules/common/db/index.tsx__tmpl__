@@ -1,0 +1,6 @@
+export const GetDataInit = {
+  rows: [],
+  columns: [],
+  description: '',
+  header: [],
+}

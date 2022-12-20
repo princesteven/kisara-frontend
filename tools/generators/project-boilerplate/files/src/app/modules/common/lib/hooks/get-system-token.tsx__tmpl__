@@ -1,0 +1,26 @@
+import {useReduxPost} from './index';
+import {getSystemToken} from '../../../authentication/slices/authentication';
+
+/**
+ * @function
+ * @name getSystToken
+ * @description hook for getting the system token
+ * @version 0.0.1
+ * @since 0.0.1
+ * @author Prince Malipula
+ */
+export default function getSystToken() {
+  const reduxPost = useReduxPost();
+
+  const getToken = () => {
+    return reduxPost(
+      getSystemToken,
+      {
+        systemCode: process.env['NX_SYSTEM_CODE'],
+      },
+      false
+    )
+  };
+
+  return getToken;
+}

@@ -1,0 +1,20 @@
+@tailwind components;
+@tailwind base;
+@tailwind utilities;
+
+.custom-button {
+  outline: none !important;
+  border: none !important;
+  transition: all linear 0.25s;
+  color: rgb(233, 233, 233);
+  box-shadow: none !important;
+  color: white !important;
+  display: flex;
+  align-items: center;
+  padding-bottom: 5px;
+}
+
+.default-icon-button {
+  color: #094A8D !important;
+  background: transparent !important;
+}

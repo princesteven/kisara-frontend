@@ -1,0 +1,113 @@
+import React, { useState } from 'react';
+import { Button, Form, Input } from 'antd';
+import { CheckOutlined, LoadingOutlined } from '@ant-design/icons';
+import { selectAuthDetails } from '../../../authentication/slices/authentication';
+import {useAppSelector, useReduxFetch, useReduxPost} from "../../lib/hooks";
+import {messages} from "@react-frontends/v2/components";
+
+interface OTPProps {
+    action: any;
+    values?: any;
+    request?: 'get' | 'post';
+}
+
+/**
+ * @function
+ * @name OTP
+ * @param props.action redux action to be performed such as getUser etc.
+ * @param props.values values to be submitted
+ * @param props.request get or post
+ * @description Handles sending the OTP and Validating the action
+ * @version 0.0.1
+ * @since 0.0.1
+ * @author Prince Malipula
+ * @returns Component to Enter OTP
+ */
+const OTP: React.FC<OTPProps> = ({ action, values, request = 'post' }) => {
+    const [otp] = Form.useForm();
+    const reduxPost = useReduxPost();
+    const reduxFetch = useReduxFetch();
+    const [error, setError] = useState(false);
+    const [loading, setLoading] = useState(false);
+    const { user } = useAppSelector(selectAuthDetails);
+
+    const handleOtp = (values: any) => {
+        setLoading(true);
+        const requestAction = request === 'get' ? reduxFetch : reduxPost;
+
+        if (request === 'post' && !values) {
+            messages('error', 'developer error');
+            return;
+        }
+
+        if (!values) {
+            reduxFetch(action)
+                .then(() => {
+                    setLoading(false);
+                })
+                .catch(() => {
+                    setLoading(false);
+                });
+            return;
+        }
+        handleRequest(requestAction, values.otp);
+    };
+
+    const handleRequest = (requestAction: any, otp: number) => {
+        const vals = {
+            ...values,
+            validator: {
+                otp: otp,
+                username: `${user?.username}@nmbtz.com`
+            },
+        };
+        requestAction(action, vals)
+            .then(() => {
+                setLoading(false);
+            })
+            .catch(() => {
+                setLoading(false);
+            });
+    };
+
+    return (
+        <div style={{ maxWidth: '250px' }}>
+            <div>Authorized Personnel Only</div>
+            <Form name="otp" form={otp} id="otp" onFinish={handleOtp}>
+                <div className="grid gap-2 grid-cols-3">
+                    <Form.Item
+                        {...(error && {
+                            help: 'Invalid OTP',
+                            validateStatus: 'error',
+                        })}
+                        name="otp"
+                        className="col-span-2"
+                        rules={[
+                            {
+                                required: true,
+                                message: 'Enter OTP',
+                            },
+                            {
+                                len: 6,
+                                message: 'Invalid OTP',
+                            },
+                        ]}
+                    >
+                        <Input placeholder="Enter your OTP" type="password" />
+                    </Form.Item>
+                    <div className="col-span-1">
+                        {!loading ? (
+                            <Button htmlType="submit">
+                                <CheckOutlined className="text-green-600" />
+                            </Button>
+                        ) : (
+                            <LoadingOutlined className="text-nmb-blue-secondary" />
+                        )}
+                    </div>
+                </div>
+            </Form>
+        </div>
+    );
+};
+
+export default OTP;

@@ -1,0 +1,97 @@
+import React from 'react';
+import {AxisOptions, Chart} from "react-charts";
+
+/**
+ * @function
+ * @name Dashboard
+ * @description Dashboard Page
+ * @version 0.0.1
+ * @since 0.1.0
+ * @author Prince Malipula
+ * @returns {object} Dashboard
+ */ import {Col, Row} from "antd";
+
+const Dashboard:React.FC = () => {
+  const primaryAxis = React.useMemo(
+    (): AxisOptions<DailyStars> => ({
+      getValue: datum => datum.date,
+    }),
+    []
+  )
+
+  const secondaryAxes = React.useMemo(
+    (): AxisOptions<DailyStars>[] => [
+      {
+        getValue: datum => datum.stars,
+      },
+    ],
+    []
+  )
+
+  type DailyStars = {
+    date: Date,
+    stars: number,
+  }
+
+  type Series = {
+    label: string,
+    data: DailyStars[]
+  }
+
+  const data: Series[] = [
+    {
+      label: 'React Charts',
+      data: [
+        {
+          date: new Date(),
+          stars: 202123,
+        }
+        // ...
+      ]
+    },
+    {
+      label: 'React Query',
+      data: [
+        {
+          date: new Date(),
+          stars: 10234230,
+        }
+        // ...
+      ]
+    }
+  ]
+
+  return (
+    <Row>
+      <Col span={8}>
+        <Chart
+          options={{
+            data,
+            primaryAxis,
+            secondaryAxes,
+          }}
+        />
+      </Col>
+      <Col span={8}>
+        <Chart
+          options={{
+            data,
+            primaryAxis,
+            secondaryAxes,
+          }}
+        />
+      </Col>
+      <Col span={8}>
+        <Chart
+          options={{
+            data,
+            primaryAxis,
+            secondaryAxes,
+          }}
+        />
+      </Col>
+    </Row>
+  )
+}
+
+export default Dashboard

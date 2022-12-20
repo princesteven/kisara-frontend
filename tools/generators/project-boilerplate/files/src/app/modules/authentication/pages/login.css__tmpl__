@@ -1,0 +1,156 @@
+.bg-login {
+  background-image: url('libs/v2/assets/images/background.jpg');
+  height: 100vh;
+  width: 100vw;
+}
+
+.full-height {
+  height: 100vh;
+}
+
+.form-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background-color: white;
+  box-shadow: 0 0 30px rgba(0, 0, 0, 0.2);
+  padding: 20px;
+}
+
+.form-title {
+  color: #094A8D !important;
+  font-size: 40px;
+}
+
+.title-line {
+  width: 25px;
+  height: 3px;
+  border-radius: 5px;
+  background: #094A8D;
+  margin-top: -6px;
+  margin-right: 2px;
+}
+
+.form-header-container {
+  display: flex;
+  flex-direction: column;
+  align-items:flex-end;
+  margin-bottom: 50px;
+}
+
+.form-items-container{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.text-input{
+  outline: none !important;
+  background-color: #EAEAEA;
+  box-shadow: none !important;
+  width: 260px;
+  border: none;
+}
+
+.text-input-container {
+  display: flex;
+  border-radius: 200px;
+  border: solid 1.5px #E3E3E3;
+  background-color: #EAEAEA;
+  padding: 9px 20px;
+  margin-bottom: 6px;
+  flex-direction: row;
+  align-items: center;
+  transition: all linear 0.25s;
+}
+
+.text-input-container:hover {
+  border: solid 1.5px #094b8d49 !important;
+}
+
+.text-input-icon {
+  background-size: contain;
+  width: 16px;
+  height: 16px;
+  margin-right: 12px;
+  background-repeat: no-repeat;
+}
+
+.login-button {
+  background-color: #094A8D;
+  outline: none !important;
+  border: none !important;
+  margin-top: 38px;
+  padding: 0px 80px;
+  height: 40px;
+}
+
+.logout-button {
+  background-color: #094A8D;
+  outline: none !important;
+  border: none !important;
+  margin-top: 38px;
+  padding: 0px 40px;
+  height: 30px;
+  color: white;
+  transition: all linear 0.25s;
+}
+
+
+.login-button:hover {
+  background-color: #1264b6;
+}
+
+.logout-button:hover {
+  background-color: #1264b6;
+}
+
+.right-side-info {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 90px 10px 50px 90px;
+  font-family: Arial, Helvetica, sans-serif;
+  color: white;
+
+}
+
+.right-side-info .content {
+  margin-top: -26px;
+  font-size: 18px;
+  color: rgb(224, 224, 224);
+}
+
+.right-side-info h1 {
+  color: white;
+  font-weight: bolder;
+  font-size: 34px;
+  white-space: nowrap;
+}
+
+.preloader {
+  color: #094A8D;
+  font-size: 20px;
+  margin-top: -30px;
+}
+
+
+.ant-modal-confirm-btns .ant-btn-primary{
+  display: none;
+}
+
+.portals-image {
+  height: 400px;
+}
+
+.logo {
+  height: 150px;
+}
+
+.preloader {
+  color: #094A8D;
+  font-size: 20px;
+  margin-top: -30px;
+}

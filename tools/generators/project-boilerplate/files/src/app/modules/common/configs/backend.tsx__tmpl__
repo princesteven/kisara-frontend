@@ -1,0 +1,19 @@
+export default {
+  v1: {
+    index: 'v1',
+    auth_service: {
+      index: 'auth',
+      login: 'login',
+      users: {
+        index: 'users',
+        system_access_token: 'system-access-token',
+        lookup: 'lookup-ldap-user',
+        data: 'list-data',
+        single: 'user',
+        grant_access: 'grant-access',
+        revoke_access: 'revoke-access',
+        get_new_token: 'access-token',
+      },
+    },
+  },
+}

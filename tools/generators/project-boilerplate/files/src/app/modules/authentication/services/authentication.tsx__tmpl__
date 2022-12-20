@@ -1,0 +1,45 @@
+import Cookies from 'js-cookie';
+import {Auth, be} from "../../common/configs";
+import { environment } from "../../../../../environments";
+import {AccessToken, AuthData, AuthenticationPayload, AuthResponse, SystemTokenPayload} from "../types";
+
+export const api_login = async (payload: AuthenticationPayload): Promise<AuthData> => {
+  const response = await Auth.post<AuthResponse>(
+    `${be.v1.auth_service.index}/${be.v1.index}/${be.v1.auth_service.login}`,
+    payload
+  );
+  const {data} = response;
+  return data.data;
+};
+
+export const api_getAccessToken = async (): Promise<AccessToken> => {
+  const currentUser = Cookies.get('user') || '{}';
+  const refreshToken = JSON.parse(currentUser)?.refreshToken;
+  const accessToken = JSON.parse(currentUser)?.accessToken;
+
+  const payload = {
+    accessToken,
+    refreshToken,
+    systemCode: environment[environment.env].SYSTEM_CODE,
+  }
+
+  console.log('the payload is', currentUser)
+
+  const response = await Auth.post<AccessToken>(
+    `${be.v1.auth_service.index}/${be.v1.index}/${be.v1.auth_service.users.get_new_token}`,
+    payload
+  );
+  const {data} = response;
+  return data;
+};
+
+export const api_getSystemToken = async (
+  payload: SystemTokenPayload
+): Promise<AuthData> => {
+  const response = await Auth.post<any>(
+    `${be.v1.auth_service.index}/${be.v1.index}/${be.v1.auth_service.users.index}/${be.v1.auth_service.users.system_access_token}`,
+    payload
+  );
+  const {data} = response;
+  return data.data;
+};

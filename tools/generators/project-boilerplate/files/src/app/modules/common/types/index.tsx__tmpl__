@@ -1,0 +1,15 @@
+export interface GenericResponse {
+    message?: string;
+    data: unknown;
+    statusCode: string;
+    timestamp: string;
+}
+
+export interface GenericDataList {
+    id: number | string;
+    name: string;
+}
+
+export interface ValidationErrors {
+    [key: string]: string[];
+}

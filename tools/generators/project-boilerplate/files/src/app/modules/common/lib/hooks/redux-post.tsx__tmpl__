@@ -1,0 +1,66 @@
+import { useAppDispatch } from './';
+import { unwrapResult } from '@reduxjs/toolkit';
+import { messages } from '@react-frontends/v2/components';
+import { setLoginPopup } from '../../../authentication/slices/authentication';
+
+/**
+ * Hook for posting data using redux
+ * @version 0.0.4
+ * @since 0.0.1
+ * @author Prince Malipula
+ * @returns Response from dispatch
+ * @returns {Function} a post function to redux
+ */
+export default function useReduxPost() {
+    const dispatch = useAppDispatch();
+    /**
+     * Function to post data using redux
+     * @param action redux action
+     * @param values values to post
+     * @version 0.0.4
+     * @since 0.0.1
+     * @author Prince Malipula
+     * @returns Response from dispatch
+     */
+    const post = (action: any, values: any, canAlert: boolean = true) => {
+        return dispatch(action(values))
+            .then((response: any) => {
+                if (canAlert)
+                {
+                    if (unwrapResult(response)?.message) {
+                        messages('success', unwrapResult(response).message);
+                    } else {
+                        messages('success', 'Operation Successful');
+                    }
+                }
+                return Promise.resolve(unwrapResult(response));
+            })
+            .catch((error: any) => {
+                console.log('be err', error);
+                if (
+                    String(error?.message).toLowerCase() === 'session expired'
+                ) {
+                    dispatch(setLoginPopup(true));
+                }
+                if (error?.desc) {
+                    messages('error', error.desc);
+                } else if (error?.message) {
+                    messages('error', error.message);
+                } else if (
+                    error?.statusCode &&
+                    error?.statusDesc &&
+                    error?.statusCode !== 200
+                ) {
+                    messages('error', error.statusDesc);
+                } else {
+                    messages(
+                        'error',
+                        'Internal Server Error. Contact Admin if you are online'
+                    );
+                }
+                return Promise.reject(error);
+            });
+    };
+
+    return post;
+}

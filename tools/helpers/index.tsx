@@ -1,0 +1,12 @@
+export { ucfirst } from "./ucfirst";
+export { lcfirst } from "./lcfirst";
+export { updateAppStore } from "./update-app-store";
+export { createFileName } from "./create-file-name";
+export { updateAppMenus } from "./update-app-menus";
+export { updateAppRoutes } from "./update-app-routes";
+export { updateBackendUrl } from "./update-backend-url";
+export { createFeatureName } from "./create-feature-name";
+export { updateFrontendUrl } from "./update-frontend-url";
+export { checkApplicationExist } from "./check-application-exist";
+export { createFeatureFunctionName } from "./create-feature-function-name";
+export { getApplicationPort, updateApplicationDb } from "./update-applications-db";

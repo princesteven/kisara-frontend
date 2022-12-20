@@ -1,0 +1,266 @@
+import Cookies from 'js-cookie';
+import {AxiosError} from 'axios';
+import {Auth} from '../../common/configs';
+import {RootState} from '../../../../store';
+import {parseJwt} from '@react-frontends/v2/helpers';
+import {createAsyncThunk, createSlice, PayloadAction} from '@reduxjs/toolkit';
+import {api_getAccessToken, api_getSystemToken, api_login} from "../services";
+import { User } from "../../../../../../../libs/v2/helpers/src/lib/parse-jwt/user-types";
+import {
+  AccessToken,
+  AuthData,
+  AuthenticationPayload,
+  InitialState,
+  SystemTokenPayload,
+} from "../types";
+
+const initialState: InitialState = {
+  user: {
+    username: '',
+    name: '',
+    email: '',
+    phoneNumber: '',
+    userDescription: '',
+    tokenDuration: '',
+    businessUnit: '',
+    authenticationType: '',
+    clientName: '',
+    clientId: '',
+    status: '',
+    permissions: [],
+    isLoggedIn: true,
+    systems: [],
+    userGroups: [],
+  },
+  loading: false,
+  error: null,
+  loadingUser: true,
+  loginPopup: false,
+};
+
+export const login = createAsyncThunk<AuthData,
+  AuthenticationPayload,
+  { rejectValue: any }>('login', async (payload, {rejectWithValue}) => {
+  try {
+    return await api_login(payload);
+  } catch (error: any) {
+    const err: AxiosError<any> = error;
+    if (!err.response) {
+      throw err;
+    }
+    return rejectWithValue(err.response.data);
+  }
+});
+
+export const getAccessToken = createAsyncThunk<AccessToken,
+  void,
+  { rejectValue: any }>('auth/grantAccessToken', async (_, {rejectWithValue}) => {
+  try {
+    return await api_getAccessToken();
+  } catch (error: any) {
+    const err: AxiosError<any> = error;
+    if (!err.response) {
+      throw err;
+    }
+    return rejectWithValue(err.response.data);
+  }
+});
+
+export const getSystemToken = createAsyncThunk<AuthData,
+  SystemTokenPayload,
+  { rejectValue: any }>('auth/getSystemAccessToken', async (payload, {rejectWithValue}) => {
+  try {
+    return await api_getSystemToken(payload);
+  } catch (error: any) {
+    const err: AxiosError<any> = error;
+    if (!err.response) {
+      throw err;
+    }
+    return rejectWithValue(err.response.data);
+  }
+});
+
+export const logout = createAsyncThunk<any, any, { rejectValue: any }>(
+  'logout',
+  async () => {
+    return {
+      message: 'Logged out',
+    };
+  }
+);
+
+export const authSlice = createSlice({
+  name: 'auth',
+  initialState,
+  reducers: {
+    setAuth: (state, action: PayloadAction<User>) => {
+      state.user = action.payload;
+    },
+    setLoadingUser: (state, action: PayloadAction<boolean>) => {
+      state.loading = action.payload;
+    },
+    setLoginPopup: (state, action: PayloadAction<boolean>) => {
+      state.loginPopup = action.payload;
+    },
+    resetAuth: (state) => {
+      state.user = {
+        username: '',
+        name: '',
+        email: '',
+        phoneNumber: '',
+        userDescription: '',
+        tokenDuration: '',
+        businessUnit: '',
+        authenticationType: '',
+        clientName: '',
+        clientId: '',
+        status: '',
+        permissions: [],
+        isLoggedIn: false,
+        systems: [],
+        userGroups: [],
+      };
+    },
+  },
+  extraReducers: (builder) => {
+    builder
+      .addCase(
+        login.fulfilled,
+        (state, action: PayloadAction<AuthData>) => {
+          const user = {
+            ...action.payload.user,
+            isLoggedIn: true,
+            accessToken: action.payload.accessToken,
+            refreshToken: action.payload.refreshToken,
+            masterToken: action.payload.masterToken,
+            permissions: parseJwt(action.payload.accessToken)
+              .permissions,
+            systems: action.payload.user.systems,
+            userGroups: action.payload.user?.userGroups || [],
+          };
+          state.loading = false;
+          state.user = user;
+          state.error = {
+            desc: '',
+            status: '',
+          };
+          const localUser = {
+            accessToken: user.accessToken,
+            refreshToken: user.refreshToken,
+            masterToken: user.masterToken,
+          };
+          localStorage.setItem(
+            'userSystems',
+            JSON.stringify(action.payload.user.systems)
+          );
+          Cookies.set('user', JSON.stringify(localUser), {
+            ...(process.env['NODE_ENV'] === 'production' && {
+              domain: 'nmbtz.com',
+            }),
+          });
+          sessionStorage.setItem('user', JSON.stringify(localUser));
+          Auth.defaults.headers.common['Authorization'] =
+            user?.accessToken ? `Bearer ${user.accessToken}` : '';
+        }
+      )
+      .addCase(login.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(login.rejected, (state) => {
+        state.loading = false;
+      })
+      .addCase(logout.fulfilled, (state) => {
+        state.loading = false;
+        sessionStorage.removeItem('user');
+        Cookies.remove('user', {
+          ...(process.env['NODE_ENV'] === 'production' && {
+            domain: 'nmbtz.com',
+          }),
+        });
+        state.error = null;
+        state.user = {
+          username: '',
+          name: '',
+          email: '',
+          phoneNumber: '',
+          userDescription: '',
+          tokenDuration: '',
+          businessUnit: '',
+          authenticationType: '',
+          clientName: '',
+          clientId: '',
+          status: '',
+          permissions: [],
+          isLoggedIn: false,
+          systems: [],
+          userGroups: [],
+        };
+      })
+      .addCase(logout.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(logout.rejected, (state) => {
+        state.loading = false;
+      })
+
+      .addCase(getSystemToken.fulfilled, (state, action: PayloadAction<AuthData>) => {
+        state.loading = false;
+        const {refreshToken, masterToken, accessToken, user} = action.payload
+        const savedTokens = {refreshToken, masterToken, accessToken}
+        Cookies.set('user', JSON.stringify(savedTokens), {
+          ...(process.env['NODE_ENV'] === 'production' && {
+            domain: 'nmbtz.com',
+          }),
+        });
+        localStorage.setItem(
+          'userSystems',
+          JSON.stringify(user.systems)
+        );
+        sessionStorage.setItem('user', JSON.stringify(savedTokens))
+        state.user = {
+          ...action.payload.user,
+          permissions: parseJwt(accessToken).permissions,
+          isLoggedIn: true
+        }
+      })
+
+      .addCase(getSystemToken.pending, (state) => {
+        state.loading = true;
+      })
+
+      .addCase(getSystemToken.rejected, (state) => {
+        state.loading = false;
+        Cookies.remove('user', {
+          ...(process.env['NODE_ENV'] === 'production' && {
+            domain: 'nmbtz.com',
+          }),
+        });
+        sessionStorage.removeItem('user');
+        window.location.href = `${process.env['NX_NMP_URL']}/#/?origin=${process.env['NX_APP_URL']}`;
+        state.user = {
+          username: '',
+          name: '',
+          email: '',
+          phoneNumber: '',
+          userDescription: '',
+          tokenDuration: '',
+          businessUnit: '',
+          clientName: '',
+          clientId: '',
+          authenticationType: '',
+          status: '',
+          permissions: [],
+          isLoggedIn: false,
+          systems: [],
+          userGroups: [],
+        };
+      })
+  },
+});
+
+export const {setAuth, resetAuth, setLoginPopup} =
+  authSlice.actions;
+
+export const selectAuthDetails = (state: RootState) => state.auth;
+
+export default authSlice.reducer;

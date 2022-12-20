@@ -1,0 +1,23 @@
+import React from 'react';
+import frontend from './frontend';
+import {MenuChildren, Menus} from "../../../../../../../libs/v2/components/src/lib/layout/layout-types";
+import {
+  AppstoreFilled as DashboardIcon,
+} from '@ant-design/icons';
+
+export const menus: Menus[] = [
+  {
+    name: 'Dashboard',
+    link: frontend.dashboard,
+    icon: <DashboardIcon />,
+  },
+];
+
+export const renderedMenus: Menus[] = menus.map((menu) => {
+  if (menu.children) {
+    menu.childrenLinks = menu.children.map(
+      (child: MenuChildren) => child.link
+    );
+  }
+  return menu;
+});

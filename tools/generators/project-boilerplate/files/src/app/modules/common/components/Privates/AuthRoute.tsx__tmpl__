@@ -1,0 +1,28 @@
+import {frontend} from "../../configs";
+import {useAppSelector} from "../../lib/hooks";
+import {Navigate, useLocation} from "react-router-dom";
+import Login from "../../../authentication/pages/login";
+import {selectAuthDetails} from "../../../authentication/slices/authentication";
+
+/**
+ * @function
+ * @name AuthRoute
+ * @description Checks if the user is authenticated. If so, redirect to homepage. If not, display the login page.
+ * @param props.element Component to render
+ * @version 2.0.1
+ * @since 2.0.1
+ * @author Prince Malipula
+ * @returns {Node} component that is the page
+ */
+const AuthRoute: React.FC = ( { ...props }) => {
+  const location = useLocation()
+  const { user } = useAppSelector(selectAuthDetails);
+
+  return user?.isLoggedIn ? (
+    <Navigate to={frontend.dashboard} state={{ from: location }} />
+  ) : (
+    <Login path={frontend.login} />
+  );
+};
+
+export default AuthRoute;

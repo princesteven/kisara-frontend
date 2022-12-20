@@ -1,0 +1,28 @@
+import React from 'react';
+import {menus} from "../../configs";
+import {useAppSelector} from "../../lib/hooks";
+import {Layout} from "@react-frontends/v2/components";
+import { environment } from "../../../../../environments";
+import {selectAuthDetails} from "../../../authentication/slices/authentication";
+import mkononi from '../../../../../../../../libs/v2/assets/images/mkononi_logo.png';
+
+const AppLayout = () => {
+  const {user} = useAppSelector(selectAuthDetails)
+
+  return (
+    <Layout
+      logo={mkononi}
+      title={'CUSTOMER ONBOARDING'}
+      signOutUrl={process.env['NX_NMP_URL']!}
+      menus={menus}
+      user={user}
+      version={{
+        major: environment[environment.env].MAJOR_VERSION,
+        minor: environment[environment.env].MINOR_VERSION,
+        fix: environment[environment.env].FIX_VERSION,
+      }}
+    />
+  )
+};
+
+export default AppLayout;

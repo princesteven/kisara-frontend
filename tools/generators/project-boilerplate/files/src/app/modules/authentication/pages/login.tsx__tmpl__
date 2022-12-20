@@ -1,0 +1,132 @@
+import './login.css';
+import { useState } from "react";
+import {login} from "../slices/authentication";
+import { Button, Col, Form, Modal, Row } from "antd";
+import { useReduxPost } from "../../common/lib/hooks";
+import {Helmet, HelmetProvider} from "react-helmet-async";
+import { TextInput } from "@react-frontends/v2/components";
+import {ExclamationCircleOutlined, LoadingOutlined} from "@ant-design/icons";
+import iconLock from '../../../../../../../libs/v2/assets/icons/lock_icon.png';
+import iconUser from '../../../../../../../libs/v2/assets/icons/user_icon.png';
+
+/**
+ * @function
+ * @name Login
+ * @description Authenticate user
+ * @param props Component props
+ * @version 2.0.0
+ * @since 2.0.0
+ * @author Prince Malipula
+ * @returns {object} Authenticated User
+ */
+const Login = (props: any) => {
+  const reduxPost = useReduxPost();
+  const [error, setError] = useState()
+  const [loading, setLoading] = useState(false);
+
+  const handleError = () => {
+    Modal.confirm({
+      title: 'Oops!',
+      icon: <ExclamationCircleOutlined />,
+      content: error,
+      cancelText: 'Retry',
+      width: 500,
+      centered: true,
+    });
+  };
+
+  const handleSubmit = (credentials: any) => {
+    setLoading(true);
+    reduxPost(login, credentials)
+      .then(() => setLoading(false))
+      .catch((err: any) => {
+        setError(err.message)
+        handleError()
+        setLoading(false);
+      });
+  };
+
+  return (
+    <HelmetProvider>
+      <div className="absolute top-0 left-0 w-full h-full bg-cover">
+        <Helmet>
+          <title>
+            Login
+          </title>
+          <link rel="shortcut icon" href="libs/v2/assets/images/favicon.ico" type="image/x-icon" />
+        </Helmet>
+      </div>
+      <div className="bg-login bg-center">
+        <Row className={'full-height'}>
+          <Col
+            span={5}
+            offset={1}
+            xs={15}
+            sm={12}
+            md={10}
+            lg={8}
+            xl={7}
+            xxl={6}
+          >
+            <div className="form-container">
+              <div className={'form-header-container'}>
+                <span className={'form-title'}>Sign In</span>
+                <div className={'title-line'}></div>
+              </div>
+              <Form
+                name="basic"
+                onFinish={handleSubmit}
+                className="form-items-container"
+              >
+                <Form.Item name="username">
+                  <TextInput
+                    name="domain"
+                    required={true}
+                    type="text"
+                    icon={iconUser}
+                    placeholder="Enter your username"
+                  />
+                </Form.Item>
+                <Form.Item name="password">
+                  <TextInput
+                    name="password"
+                    required={true}
+                    type="password"
+                    icon={iconLock}
+                    placeholder="Enter your password"
+                  />
+                </Form.Item>
+                <Form.Item name="otp">
+                  <TextInput
+                    name="otp"
+                    required={false}
+                    type="text"
+                    icon={iconLock}
+                    placeholder="Enter your DigiPass"
+                  />
+                </Form.Item>
+                <Button
+                  type={'primary'}
+                  htmlType={'submit'}
+                  shape={'round'}
+                  className={`login-button animate__animated ${
+                    loading
+                      ? 'animate__fadeOut'
+                      : 'animate__fadeIn'
+                  } animate__faster`}
+                >
+                  Login
+                </Button>
+                {loading && (
+                  <LoadingOutlined className={`preloader`} />
+                )}
+              </Form>
+            </div>
+          </Col>
+        </Row>
+      </div>
+    </HelmetProvider>
+  )
+}
+
+export default Login

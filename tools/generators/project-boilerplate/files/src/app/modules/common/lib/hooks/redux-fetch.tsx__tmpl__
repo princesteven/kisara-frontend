@@ -1,0 +1,59 @@
+import { useAppDispatch } from '.';
+import React from 'react';
+import { unwrapResult } from '@reduxjs/toolkit';
+import {messages} from "@react-frontends/v2/components";
+import {setLoginPopup} from "../../../authentication/slices/authentication";
+// import { setLoginPopup } from '../slices/authentication';
+
+/**
+ * Hook for fetching data using redux
+ * @version 2.0.0
+ * @since 2.0.0
+ * @author Prince Malipula
+ * @returns Response from dispatch
+ * @returns {Function} a get function to redux
+ */
+function ReduxFetch() {
+    const dispatch = useAppDispatch();
+
+    /**
+     * Function for fetching the data using redux
+     * @param action redux action
+     * @param filter array of objects specifically for user management. Leave empty if not used in user management
+     * @version 2.0.0
+     * @since 2.0.0
+     * @author Prince Malipula
+     * @returns Response from dispatch
+     */
+    const reduxFetch = async (action: any, filter: any = null) => {
+        try {
+            let response;
+            filter
+                ? (response = await dispatch(action(filter)))
+                : (response = await dispatch(action()));
+            return Promise.resolve(unwrapResult(response));
+        } catch (error: any) {
+            console.log('the error', error);
+
+            if (String(error.message).toLowerCase() === 'session expired') {
+                dispatch(setLoginPopup(true))
+            }
+
+            if (error.desc) {
+                messages('error', error.desc);
+            } else if (error.message) {
+                messages('error', error.message);
+            } else {
+                messages(
+                    'error',
+                    'Internal Server Error. Contact Admin if you are online'
+                );
+            }
+
+            return Promise.reject(error);
+        }
+    };
+    return reduxFetch;
+}
+
+export default ReduxFetch;

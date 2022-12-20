@@ -1,0 +1,7 @@
+export {
+    api_get<%= createFeatureName(name, true) %>,
+    api_put<%= createFeatureName(name) %>,
+    api_post<%= createFeatureName(name) %>,
+    api_delete<%= createFeatureName(name) %>,
+    api_get<%= createFeatureName(name) %>,
+} from './<%= createFileName(name) %>';

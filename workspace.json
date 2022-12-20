@@ -1,0 +1,24 @@
+{
+    "version": 2,
+    "projects": {
+        "cure": "apps/cure",
+        "cure-e2e": "apps/cure-e2e",
+        "master-portal": "apps/master-portal",
+        "master-portal-e2e": "apps/master-portal-e2e",
+        "mkononi": "apps/mkononi",
+        "mkononi-e2e": "apps/mkononi-e2e",
+        "onboarding": "apps/onboarding",
+        "onboarding-e2e": "apps/onboarding-e2e",
+        "user-management": "apps/user-management",
+        "user-management-e2e": "apps/user-management-e2e",
+        "v1-components": "libs/v1/components",
+        "v1-components-e2e": "apps/v1-components-e2e",
+        "v1-helpers": "libs/v1/helpers",
+        "v1-hooks": "libs/v1/hooks",
+        "v2-components": "libs/v2/components",
+        "v2-components-e2e": "apps/v2-components-e2e",
+        "v2-helpers": "libs/v2/helpers",
+        "v2-hooks": "libs/v2/hooks"
+    },
+    "$schema": "./node_modules/nx/schemas/workspace-schema.json"
+}

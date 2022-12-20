@@ -1,0 +1,60 @@
+import isEmpty from "lodash/isEmpty";
+import intersection from "lodash/intersection";
+import {useAppSelector} from "../../lib/hooks";
+import {selectAuthDetails} from "../../../authentication/slices/authentication";
+
+interface PrivateActionProps {
+  children: React.ReactNode;
+  permissions?: string[] | string;
+}
+
+/**
+ * @function
+ * @name PrivateAction
+ * @description returns a component to the interface only if a signed in user is authenticated to do that
+ * @version 2.0.0
+ * @since 2.0.0
+ * @author Prince Malipula
+ * @returns Authorized action such as edit, delete etc
+ */
+const PrivateAction: React.FC<PrivateActionProps> = ({
+                                                       children,
+                                                       permissions,
+                                                     }) => {
+  const { user } = useAppSelector(selectAuthDetails);
+
+  const isAuthorized = () => {
+    // if there is no value in permissions prop, it means that all permissions are allowed. return true
+    if (!permissions) return true;
+    //  check if permission passed is string.
+    //  if it is string, check if the permission passed is included in the array of user permissions
+    //  if it is included or if the string is '*', return true
+    //  if it is not included, return false
+    if (typeof permissions == 'string') {
+      const isPermitted: boolean = user.permissions.includes(permissions);
+      if (isPermitted || permissions === '*') {
+        return true;
+      }
+      return false;
+    }
+    // if the permission passed is not string, it has to be an array. check if it array
+    // if it is array, check if there is intersection of the permissions array and user permissions array
+    // if the resulting array has items, return true
+    // if the resulting array is empty, return false
+    if (Array.isArray(permissions)) {
+      const permittedPermissions: string[] = intersection(permissions, user.permissions);
+      if (!isEmpty(permittedPermissions)) {
+        return true;
+      }
+      return false;
+    }
+    // if whatever that is passed as permissions props is neither string nor array, return false
+    return false;
+  };
+
+  return <>
+    {isAuthorized() && children}
+  </>;
+};
+
+export default PrivateAction;

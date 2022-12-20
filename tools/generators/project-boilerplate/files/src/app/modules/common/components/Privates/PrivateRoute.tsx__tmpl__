@@ -1,0 +1,116 @@
+import compact from 'lodash/compact';
+import isEmpty from 'lodash/isEmpty';
+import flatten from 'lodash/flatten';
+import cloneDeep from 'lodash/cloneDeep';
+import {frontend, menus} from "../../configs";
+import intersection from 'lodash/intersection';
+import { useIdleTimer } from 'react-idle-timer';
+import React, { useEffect, useState } from 'react';
+import Unauthorized from "../../pages/Unauthorized";
+import {useAppDispatch, useAppSelector} from "../../lib/hooks";
+import LoginModal from "../../../authentication/components/Login";
+import { useLocation, Navigate, useParams } from 'react-router-dom';
+import {selectAuthDetails, setLoginPopup} from "../../../authentication/slices/authentication";
+import {
+  MenuChildren,
+  MenuWithoutChildren
+} from "../../../../../../../../libs/v2/components/src/lib/layout/layout-types";
+
+interface PrivateRouteProps {
+    component: any;
+}
+
+/**
+ * @function
+ * @name PrivateRoute
+ * @description Protects page. Redirects to logout if user is not authenticated
+ * @param props.component component to render
+ * @param props.path Path to show in address bar
+ * @param props.children Nested Links
+ * @version 0.0.1
+ * @since 0.0.1
+ * @author Prince Malipula
+ * @returns {Node} component that is the page
+ */
+const PrivateRoute: React.FC<PrivateRouteProps> = ({ component }) => {
+    const params = useParams();
+    const timeout = 1000 * 60 * 15;
+    const location = useLocation();
+    const dispatch = useAppDispatch();
+    const [isIdle, setIsIdle] = useState(false);
+    const { user, loginPopup, loading } = useAppSelector(selectAuthDetails);
+
+    const handleOnActive = () => {
+        setIsIdle(false);
+    };
+
+    const handleOnIdle = () => {
+        setIsIdle(true);
+    };
+
+    const _ = useIdleTimer({
+        timeout,
+        onActive: handleOnActive,
+        onIdle: handleOnIdle,
+    });
+
+    useEffect(() => {
+        if (isIdle) {
+            dispatch(setLoginPopup(true));
+        }
+    }, [isIdle]);
+
+    const isAuthorized = () => {
+        const mergedEndpoints: any[] = [];
+
+        systemMenus().map((menu) => mergedEndpoints.push(menu));
+        systemSubmenus().map((menu) => mergedEndpoints.push(menu));
+
+        const pagePermissions = mergedEndpoints.find(
+            (endpoint) => endpoint.link === location.pathname
+        )?.permissions;
+        const permissions = intersection(pagePermissions, user.permissions);
+
+        if (isEmpty(permissions) && !isEmpty(pagePermissions)) {
+            return false;
+        }
+
+        return true;
+    };
+
+    const systemMenus = (): MenuWithoutChildren[] => {
+        const clonedMenus: any = cloneDeep(menus);
+        return clonedMenus.filter((menu: any) => !menu.children);
+    };
+
+    const systemSubmenus = (): MenuChildren[] => {
+        const clonedMenus: any = cloneDeep(menus);
+        return flatten(compact(clonedMenus.map((menu: any) => menu.children)));
+    };
+
+    if (loading) return <div>page loading ...</div>;
+
+    if (loginPopup) {
+        return (
+            <div className="z-50">
+                <LoginModal />
+            </div>
+        );
+    }
+
+    return user?.isLoggedIn ? (
+        <>
+            {isAuthorized() ? (
+                React.createElement(component, {
+                    ...params,
+                })
+            ) : (
+                <Unauthorized />
+            )}
+        </>
+    ) : (
+        <Navigate to={frontend.login} state={{ from: location }} />
+    );
+};
+
+export default PrivateRoute;

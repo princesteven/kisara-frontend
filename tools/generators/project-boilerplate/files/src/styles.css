@@ -1,0 +1,16 @@
+/* You can add global styles to this file, and also import other style files */
+@import "~animate.css";
+@import "~antd/dist/antd.css";
+
+.ant-btn-primary {
+  border-color: #1890ff;
+  background: #1890ff !important;
+}
+
+.ant-btn-dangerous.ant-btn-primary {
+  color: #fff;
+  border-color: #ff4d4f !important;
+  background: #ff4d4f !important;
+  text-shadow: 0 -1px 0 rgb(0 0 0 / 12%);
+  box-shadow: 0 2px #0000000b;
+}

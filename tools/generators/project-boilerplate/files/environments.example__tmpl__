@@ -1,0 +1,59 @@
+interface Environment {
+  env: "development" | "uat" | "production";
+  development: AppEnvironment;
+  uat: AppEnvironment;
+  production: AppEnvironment;
+}
+
+interface AppEnvironment {
+  AUTH_URL: string;
+  NMP_URL: string;
+  APP_URL: string;
+  BASE_URL: string;
+  CLIENT_ID: string;
+  CLIENT_SECRET: string;
+  MAJOR_VERSION: number;
+  MINOR_VERSION: number;
+  FIX_VERSION: number;
+  SYSTEM_CODE: string;
+}
+
+export const environment: Environment = {
+  env: "development",
+  development: {
+    AUTH_URL: "/auth/api",
+    NMP_URL: "http://localhost:4200/",
+    APP_URL: "{{localhost:<%=port%>/}}",
+    BASE_URL: "/api",
+    CLIENT_ID: "NMPPOR",
+    CLIENT_SECRET: "nmp@2022!",
+    MAJOR_VERSION: 0,
+    MINOR_VERSION: 0,
+    FIX_VERSION: 1,
+    SYSTEM_CODE: "ONBP"
+  },
+  uat: {
+    AUTH_URL: "https://cmp-web-test.nmbtz.com/api/",
+    NMP_URL: "https://ms-portal-test.nmbtz.com",
+    APP_URL: "cmp-web-test.nmbtz.com",
+    BASE_URL: "https://cmp-web-test.nmbtz.com/api/",
+    CLIENT_ID: "NMPPOR",
+    CLIENT_SECRET: "nmp@2022!",
+    MAJOR_VERSION: 0,
+    MINOR_VERSION: 0,
+    FIX_VERSION: 0,
+    SYSTEM_CODE: "ONBP"
+  },
+  production: {
+    AUTH_URL: "https://shared-api-gw.nmbtz.com/",
+    NMP_URL: "https://shared-master-portal.nmbtz.com/",
+    APP_URL: "mkononiportal.nmbtz.com",
+    BASE_URL: "https://cmp-web-test.nmbtz.com/api/",
+    CLIENT_ID: "NMPPOR",
+    CLIENT_SECRET: "nmp@2022!",
+    MAJOR_VERSION: 1,
+    MINOR_VERSION: 0,
+    FIX_VERSION: 2,
+    SYSTEM_CODE: "ONBP"
+  }
+};

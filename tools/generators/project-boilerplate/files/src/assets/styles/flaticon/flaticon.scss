@@ -1,0 +1,41 @@
+$flaticon-font: "flaticon";
+
+@font-face {
+    font-family: $flaticon-font;
+    src: url("./flaticon.ttf?40fe76b04e17a7e0387d04e520659185") format("truetype"),
+url("./flaticon.woff?40fe76b04e17a7e0387d04e520659185") format("woff"),
+url("./flaticon.woff2?40fe76b04e17a7e0387d04e520659185") format("woff2"),
+url("./flaticon.eot?40fe76b04e17a7e0387d04e520659185#iefix") format("embedded-opentype"),
+url("./flaticon.svg?40fe76b04e17a7e0387d04e520659185#flaticon") format("svg");
+}
+
+i[class^="flaticon-"]:before, i[class*=" flaticon-"]:before {
+    font-family: flaticon !important;
+    font-style: normal;
+    font-weight: normal !important;
+    font-variant: normal;
+    text-transform: none;
+    line-height: 1;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+$flaticon-map: (
+    "settings": "\f101",
+    "pin": "\f102",
+    "pencil": "\f103",
+    "delete": "\f104",
+);
+
+.flaticon-settings:before {
+    content: map-get($flaticon-map, "settings");
+}
+.flaticon-pin:before {
+    content: map-get($flaticon-map, "pin");
+}
+.flaticon-pencil:before {
+    content: map-get($flaticon-map, "pencil");
+}
+.flaticon-delete:before {
+    content: map-get($flaticon-map, "delete");
+}
